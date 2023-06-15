@@ -47,6 +47,10 @@ public class BatchCallDialIntg {
         }
     }
 
+    public List<String> fetchAgentFollowmeNumbersDummy(String authorizationToken, Optional<String> lastAgentId) {
+        return Arrays.asList("+911234567890", "+913457869001", "+912345798890");
+    }
+
     public List<String> fetchAgentFollowmeNumbers(String authorizationToken, Optional<String> lastAgentId) {
         try {
             URIBuilder uriBuilder = new URIBuilder("https://api-smartflo.tatateleservices.com/v2/agents");

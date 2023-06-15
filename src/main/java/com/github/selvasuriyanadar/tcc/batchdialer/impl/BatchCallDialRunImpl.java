@@ -79,7 +79,7 @@ public class BatchCallDialRunImpl {
     }
 
     private List<String> fetchAgentFollowmeNumbers() {
-        return batchCallDialIntg.fetchAgentFollowmeNumbers(batchCallDialConfig.fetchAuthorizationBearerToken(), Optional.empty());
+        return batchCallDialIntg.fetchAgentFollowmeNumbersDummy(batchCallDialConfig.fetchAuthorizationBearerToken(), Optional.empty());
     }
 
 }

@@ -19,6 +19,8 @@ public interface BatchCallDialRepository extends JpaRepository<BatchCallDialMast
 
     public boolean existsByBatchCallDialIdAndStatus(String batchCallDialId, BatchCallDialMaster.Status status);
 
+    public boolean existsByBatchCallDialIdAndStatusNot(String batchCallDialId, BatchCallDialMaster.Status status);
+
     public Long countByStatus(BatchCallDialMaster.Status status);
 
     public Optional<BatchCallDialMaster> findByBatchCallDialId(String batchCallDialId);
