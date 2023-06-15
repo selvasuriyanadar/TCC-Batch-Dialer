@@ -71,7 +71,7 @@ public class BatchCallDialRunImpl {
     }
 
     private void call(BatchCallDialEntry batchCallDialEntry, String agentFollowmeNumber) {
-        if (batchCallDialIntg.callDummy(batchCallDialConfig.fetchAuthorizationBearerToken(), batchCallDialEntry.getId(), agentFollowmeNumber, batchCallDialEntry.getPhone().toString())) {
+        if (batchCallDialIntg.call(batchCallDialConfig.fetchAuthorizationBearerToken(), batchCallDialEntry.getId(), agentFollowmeNumber, batchCallDialEntry.getPhone().toString())) {
             batchCallDialEntry.setStatus(BatchCallDialEntry.Status.IN_PROGRESS);
             batchCallDialEntry.setAgentFollowmeNumber(agentFollowmeNumber);
             batchCallDialEntryRepository.save(batchCallDialEntry);
@@ -79,7 +79,7 @@ public class BatchCallDialRunImpl {
     }
 
     private List<String> fetchAgentFollowmeNumbers() {
-        return batchCallDialIntg.fetchAgentFollowmeNumbersDummy(batchCallDialConfig.fetchAuthorizationBearerToken(), Optional.empty());
+        return batchCallDialIntg.fetchAgentFollowmeNumbers(batchCallDialConfig.fetchAuthorizationBearerToken(), Optional.empty());
     }
 
 }

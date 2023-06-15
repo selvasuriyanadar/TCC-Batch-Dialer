@@ -25,6 +25,12 @@ public class BatchCallDialIntg {
         return true;
     }
 
+    public List<String> fetchAgentFollowmeNumbersDummy(String authorizationToken, Optional<String> lastAgentId) {
+        return Arrays.asList("+911234567890", "+913457869001", "+912345798890");
+    }
+
+    // ---
+
     public boolean call(String authorizationToken, Long batchCallDialEntryId, String agentFollowmeNumber, String destinationNumber) {
         try {
             JsonObject requestBody = new JsonObject();
@@ -45,10 +51,6 @@ public class BatchCallDialIntg {
         catch (URISyntaxException | IOException | InterruptedException e) {
             return false;
         }
-    }
-
-    public List<String> fetchAgentFollowmeNumbersDummy(String authorizationToken, Optional<String> lastAgentId) {
-        return Arrays.asList("+911234567890", "+913457869001", "+912345798890");
     }
 
     public List<String> fetchAgentFollowmeNumbers(String authorizationToken, Optional<String> lastAgentId) {
