@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 set-java-home.sh
+/application.properties
 
 ### STS ###
 .apt_generated

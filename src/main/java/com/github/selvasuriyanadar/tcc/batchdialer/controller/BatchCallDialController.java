@@ -28,89 +28,49 @@ public class BatchCallDialController {
     private BatchCallDialRepository batchCallDialRepository;
 
     @GetMapping(value = "/get/{batchCallDialId}")
-    public ResponseEntity get(
+    public BatchCallDialMaster get(
             @PathVariable String batchCallDialId) {
-        try {
-            Optional<BatchCallDialMaster> data = batchCallDialRepository.findByBatchCallDialId(batchCallDialId);
-            if (!data.isPresent()) {
-                throw new IllegalStateException("Batch Call Dial not found.");
-            }
-            return ResponseEntity.ok(data.get());
+        Optional<BatchCallDialMaster> data = batchCallDialRepository.findByBatchCallDialId(batchCallDialId);
+        if (!data.isPresent()) {
+            throw new IllegalStateException("Batch Call Dial not found.");
         }
-        catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
-        catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        return data.get();
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity create(
+    public BatchCallDialMaster create(
             @RequestBody BatchCallDialMaster request) {
-        try {
-            return ResponseEntity.ok(batchCallDialImpl.create(request));
-        }
-        catch (IllegalArgumentException | ConstraintViolationException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
-        catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        return batchCallDialImpl.create(request);
     }
 
     @PostMapping(value = "/processTataMissedOrAnsweredClickToCall/{callStatus}")
-    public ResponseEntity processTataMissedOrAnsweredOutbound(
+    public String processTataMissedOrAnsweredOutbound(
             @RequestBody String request,
             @PathVariable BatchCallDialEntry.CallStatus callStatus) {
-        try {
-            JsonObject requestBody = new JsonParser().parse(request).getAsJsonObject();
-            batchCallDialImpl.completeCall(requestBody.getAsJsonPrimitive("custom_identifier").getAsLong(), callStatus);
-            return ResponseEntity.ok("success");
-        }
-        catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
-        catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        JsonObject requestBody = new JsonParser().parse(request).getAsJsonObject();
+        batchCallDialImpl.completeCall(requestBody.getAsJsonPrimitive("custom_identifier").getAsLong(), callStatus);
+        return "success";
     }
 
     @PostMapping(value = "/run/{batchCallDialId}")
-    public ResponseEntity run(
+    public String run(
             @PathVariable String batchCallDialId) {
-        try {
-            if (!batchCallDialRepository.existsByBatchCallDialIdAndStatus(batchCallDialId, BatchCallDialMaster.Status.PENDING)) {
-                throw new IllegalStateException("Batch Call Dial not found or it is not a Pending dial.");
-            }
-            BatchCallDialMaster data = batchCallDialRepository.findByBatchCallDialId(batchCallDialId).get();
-            batchCallDialImpl.run(data);
-            return ResponseEntity.ok("successfully run.");
+        if (!batchCallDialRepository.existsByBatchCallDialIdAndStatus(batchCallDialId, BatchCallDialMaster.Status.PENDING)) {
+            throw new IllegalStateException("Batch Call Dial not found or it is not a Pending dial.");
         }
-        catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
-        catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        BatchCallDialMaster data = batchCallDialRepository.findByBatchCallDialId(batchCallDialId).get();
+        batchCallDialImpl.run(data);
+        return "successfully run.";
     }
 
     @DeleteMapping(value = "/delete/{batchCallDialId}")
-    public ResponseEntity delete(
+    public String delete(
             @PathVariable String batchCallDialId) {
-        try {
-            if (!batchCallDialRepository.existsByBatchCallDialIdAndStatusNot(batchCallDialId, BatchCallDialMaster.Status.IN_PROGRESS)) {
-                throw new IllegalStateException("Batch Call Dial not found or it is In Progress.");
-            }
-            batchCallDialRepository.deleteById(batchCallDialId);
-            return ResponseEntity.ok("Successfully deleted.");
+        if (!batchCallDialRepository.existsByBatchCallDialIdAndStatusNot(batchCallDialId, BatchCallDialMaster.Status.IN_PROGRESS)) {
+            throw new IllegalStateException("Batch Call Dial not found or it is In Progress.");
         }
-        catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-        }
-        catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        batchCallDialRepository.deleteById(batchCallDialId);
+        return "Successfully deleted.";
     }
 
 }
